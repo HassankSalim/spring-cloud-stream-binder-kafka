@@ -69,61 +69,61 @@ For common configuration options and properties pertaining to binder, see the <<
 
 ==== Kafka Binder Properties
 
-spring.cloud.stream.kafka.binder.brokers::
+spring.cloud.stream.kafka.streams.binder.brokers::
 A list of brokers to which the Kafka binder connects.
 +
 Default: `localhost`.
-spring.cloud.stream.kafka.binder.defaultBrokerPort::
+spring.cloud.stream.kafka.streams.binder.defaultBrokerPort::
 `brokers` allows hosts specified with or without port information (for example, `host1,host2:port2`).
 This sets the default port when no port is configured in the broker list.
 +
 Default: `9092`.
-spring.cloud.stream.kafka.binder.configuration::
+spring.cloud.stream.kafka.streams.binder.configuration::
 Key/Value map of client properties (both producers and consumer) passed to all clients created by the binder.
 Due to the fact that these properties are used by both producers and consumers, usage should be restricted to common properties -- for example, security settings.
 Unknown Kafka producer or consumer properties provided through this configuration are filtered out and not allowed to propagate.
 Properties here supersede any properties set in boot.
 +
 Default: Empty map.
-spring.cloud.stream.kafka.binder.consumerProperties::
+spring.cloud.stream.kafka.streams.binder.consumerProperties::
 Key/Value map of arbitrary Kafka client consumer properties.
 In addition to support known Kafka consumer properties, unknown consumer properties are allowed here as well.
 Properties here supersede any properties set in boot and in the `configuration` property above.
 +
 Default: Empty map.
-spring.cloud.stream.kafka.binder.headers::
+spring.cloud.stream.kafka.streams.binder.headers::
 The list of custom headers that are transported by the binder.
 Only required when communicating with older applications (<= 1.3.x) with a `kafka-clients` version < 0.11.0.0. Newer versions support headers natively.
 +
 Default: empty.
-spring.cloud.stream.kafka.binder.healthTimeout::
+spring.cloud.stream.kafka.streams.binder.healthTimeout::
 The time to wait to get partition information, in seconds.
 Health reports as down if this timer expires.
 +
 Default: 10.
-spring.cloud.stream.kafka.binder.requiredAcks::
+spring.cloud.stream.kafka.streams.binder.requiredAcks::
 The number of required acks on the broker.
 See the Kafka documentation for the producer `acks` property.
 +
 Default: `1`.
-spring.cloud.stream.kafka.binder.minPartitionCount::
+spring.cloud.stream.kafka.streams.binder.minPartitionCount::
 Effective only if `autoCreateTopics` or `autoAddPartitions` is set.
 The global minimum number of partitions that the binder configures on topics on which it produces or consumes data.
 It can be superseded by the `partitionCount` setting of the producer or by the value of `instanceCount * concurrency` settings of the producer (if either is larger).
 +
 Default: `1`.
-spring.cloud.stream.kafka.binder.producerProperties::
+spring.cloud.stream.kafka.streams.binder.producerProperties::
 Key/Value map of arbitrary Kafka client producer properties.
 In addition to support known Kafka producer properties, unknown producer properties are allowed here as well.
 Properties here supersede any properties set in boot and in the `configuration` property above.
 +
 Default: Empty map.
-spring.cloud.stream.kafka.binder.replicationFactor::
+spring.cloud.stream.kafka.streams.binder.replicationFactor::
 The replication factor of auto-created topics if `autoCreateTopics` is active.
 Can be overridden on each binding.
 +
 Default: `1`.
-spring.cloud.stream.kafka.binder.autoCreateTopics::
+spring.cloud.stream.kafka.streams.binder.autoCreateTopics::
 If set to `true`, the binder creates new topics automatically.
 If set to `false`, the binder relies on the topics being already configured.
 In the latter case, if the topics do not exist, the binder fails to start.
@@ -132,24 +132,24 @@ NOTE: This setting is independent of the `auto.topic.create.enable` setting of t
 If the server is set to auto-create topics, they may be created as part of the metadata retrieval request, with default broker settings.
 +
 Default: `true`.
-spring.cloud.stream.kafka.binder.autoAddPartitions::
+spring.cloud.stream.kafka.streams.binder.autoAddPartitions::
 If set to `true`, the binder creates new partitions if required.
 If set to `false`, the binder relies on the partition size of the topic being already configured.
 If the partition count of the target topic is smaller than the expected value, the binder fails to start.
 +
 Default: `false`.
-spring.cloud.stream.kafka.binder.transaction.transactionIdPrefix::
+spring.cloud.stream.kafka.streams.binder.transaction.transactionIdPrefix::
 Enables transactions in the binder. See `transaction.id` in the Kafka documentation and https://docs.spring.io/spring-kafka/reference/html/_reference.html#transactions[Transactions] in the `spring-kafka` documentation.
-When transactions are enabled, individual `producer` properties are ignored and all producers use the `spring.cloud.stream.kafka.binder.transaction.producer.*` properties.
+When transactions are enabled, individual `producer` properties are ignored and all producers use the `spring.cloud.stream.kafka.streams.binder.transaction.producer.*` properties.
 +
 Default `null` (no transactions)
-spring.cloud.stream.kafka.binder.transaction.producer.*::
+spring.cloud.stream.kafka.streams.binder.transaction.producer.*::
 Global producer properties for producers in a transactional binder.
-See `spring.cloud.stream.kafka.binder.transaction.transactionIdPrefix` and <<kafka-producer-properties>> and the general producer properties supported by all binders.
+See `spring.cloud.stream.kafka.streams.binder.transaction.transactionIdPrefix` and <<kafka-producer-properties>> and the general producer properties supported by all binders.
 +
 Default: See individual producer properties.
 
-spring.cloud.stream.kafka.binder.headerMapperBeanName::
+spring.cloud.stream.kafka.streams.binder.headerMapperBeanName::
 The bean name of a `KafkaHeaderMapper` used for mapping `spring-messaging` headers to and from Kafka headers.
 Use this, for example, if you wish to customize the trusted packages in a `DefaultKafkaHeaderMapper` that uses JSON deserialization for the headers.
 +
@@ -369,13 +369,13 @@ public class ManuallyAcknowdledgingConsumer {
 
 Apache Kafka 0.9 supports secure connections between client and brokers.
 To take advantage of this feature, follow the guidelines in the http://kafka.apache.org/090/documentation.html#security_configclients[Apache Kafka Documentation] as well as the Kafka 0.9 http://docs.confluent.io/2.0.0/kafka/security.html[security guidelines from the Confluent documentation].
-Use the `spring.cloud.stream.kafka.binder.configuration` option to set security properties for all clients created by the binder.
+Use the `spring.cloud.stream.kafka.streams.binder.configuration` option to set security properties for all clients created by the binder.
 
 For example, to set `security.protocol` to `SASL_SSL`, set the following property:
 
 [source]
 ----
-spring.cloud.stream.kafka.binder.configuration.security.protocol=SASL_SSL
+spring.cloud.stream.kafka.streams.binder.configuration.security.protocol=SASL_SSL
 ----
 
 All the other security properties can be set in a similar manner.
@@ -392,9 +392,9 @@ The following example shows how to launch a Spring Cloud Stream application with
 [source,bash]
 ----
  java -Djava.security.auth.login.config=/path.to/kafka_client_jaas.conf -jar log.jar \
-   --spring.cloud.stream.kafka.binder.brokers=secure.server:9092 \
+   --spring.cloud.stream.kafka.streams.binder.brokers=secure.server:9092 \
    --spring.cloud.stream.bindings.input.destination=stream.ticktock \
-   --spring.cloud.stream.kafka.binder.configuration.security.protocol=SASL_PLAINTEXT
+   --spring.cloud.stream.kafka.streams.binder.configuration.security.protocol=SASL_PLAINTEXT
 ----
 
 ====== Using Spring Boot Properties
@@ -403,15 +403,15 @@ As an alternative to having a JAAS configuration file, Spring Cloud Stream provi
 
 The following properties can be used to configure the login context of the Kafka client:
 
-spring.cloud.stream.kafka.binder.jaas.loginModule::
+spring.cloud.stream.kafka.streams.binder.jaas.loginModule::
 The login module name. Not necessary to be set in normal cases.
 +
 Default: `com.sun.security.auth.module.Krb5LoginModule`.
-spring.cloud.stream.kafka.binder.jaas.controlFlag::
+spring.cloud.stream.kafka.streams.binder.jaas.controlFlag::
 The control flag of the login module.
 +
 Default: `required`.
-spring.cloud.stream.kafka.binder.jaas.options::
+spring.cloud.stream.kafka.streams.binder.jaas.options::
 Map with a key/value pair containing the login module options.
 +
 Default: Empty map.
@@ -420,14 +420,14 @@ The following example shows how to launch a Spring Cloud Stream application with
 
 [source,bash]
 ----
- java --spring.cloud.stream.kafka.binder.brokers=secure.server:9092 \
+ java --spring.cloud.stream.kafka.streams.binder.brokers=secure.server:9092 \
    --spring.cloud.stream.bindings.input.destination=stream.ticktock \
-   --spring.cloud.stream.kafka.binder.autoCreateTopics=false \
-   --spring.cloud.stream.kafka.binder.configuration.security.protocol=SASL_PLAINTEXT \
-   --spring.cloud.stream.kafka.binder.jaas.options.useKeyTab=true \
-   --spring.cloud.stream.kafka.binder.jaas.options.storeKey=true \
-   --spring.cloud.stream.kafka.binder.jaas.options.keyTab=/etc/security/keytabs/kafka_client.keytab \
-   --spring.cloud.stream.kafka.binder.jaas.options.principal=kafka-client-1@EXAMPLE.COM
+   --spring.cloud.stream.kafka.streams.binder.autoCreateTopics=false \
+   --spring.cloud.stream.kafka.streams.binder.configuration.security.protocol=SASL_PLAINTEXT \
+   --spring.cloud.stream.kafka.streams.binder.jaas.options.useKeyTab=true \
+   --spring.cloud.stream.kafka.streams.binder.jaas.options.storeKey=true \
+   --spring.cloud.stream.kafka.streams.binder.jaas.options.keyTab=/etc/security/keytabs/kafka_client.keytab \
+   --spring.cloud.stream.kafka.streams.binder.jaas.options.principal=kafka-client-1@EXAMPLE.COM
 ----
 
 The preceding example represents the equivalent of the following JAAS file:
